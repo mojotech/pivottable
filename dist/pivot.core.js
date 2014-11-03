@@ -73,6 +73,7 @@
         x = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
         return function(data, rowKey, colKey) {
           return {
+            name: "fractionOf",
             selector: {
               total: [[], []],
               row: [rowKey, []],
@@ -84,7 +85,7 @@
             },
             format: formatter,
             value: function() {
-              return this.inner.value() / data.getAggregator.apply(data, this.selector).inner.value();
+              return this.inner.value() / data.getAggregator.apply(data, this.selector).getWrappedAggregator("fractionOf").inner.value();
             },
             numInputs: wrapped.apply(null, x)().numInputs
           };
@@ -216,7 +217,6 @@
 
   PivotData = (function() {
     function PivotData(input, opts) {
-      this.wrapAggregator = __bind(this.wrapAggregator, this);
       this.getAggregator = __bind(this.getAggregator, this);
       this.getRowKeys = __bind(this.getRowKeys, this);
       this.getColKeys = __bind(this.getColKeys, this);
@@ -404,16 +404,26 @@
     };
 
     PivotData.prototype.wrapAggregator = function(pivotData, rowKey, colKey) {
+      var aggregatorMap, wrappedAggregators;
       if (rowKey == null) {
         rowKey = [];
       }
       if (colKey == null) {
         colKey = [];
       }
+      wrappedAggregators = [];
+      aggregatorMap = {};
+      this.aggregators.forEach(function(aggregator, index) {
+        var initAgg;
+        initAgg = aggregator(pivotData, rowKey, colKey);
+        if (initAgg.name != null) {
+          aggregatorMap[initAgg.name] = index;
+        }
+        return wrappedAggregators.push(initAgg);
+      });
       return {
-        wrappedAggregators: this.aggregators.map(function(aggregator) {
-          return aggregator(pivotData, rowKey, colKey);
-        }),
+        wrappedAggregators: wrappedAggregators,
+        aggregatorMap: aggregatorMap,
         value: function() {
           return this.wrappedAggregators.map(function(aggregator) {
             return aggregator.value();
@@ -433,6 +443,9 @@
           return this.wrappedAggregators.forEach(function(aggregator) {
             return aggregator.push(record);
           });
+        },
+        getWrappedAggregator: function(name) {
+          return this.wrappedAggregators[this.aggregatorMap[name]];
         }
       };
     };
