@@ -225,7 +225,11 @@ $.fn.barchart =  ->
         "padding-left":"5px"
         "padding-right":"5px"
 
-      elem.css("padding": 0,"padding-top": "5px", "text-align": "center").html wrapper
+      elem.css(
+        "padding": 0,
+        "padding-top": "5px",
+        "text-align": "center"
+      ).html wrapper
 
   barcharter ".pvtVal.row#{i}" for i in [0...numRows]
   barcharter ".pvtTotal.colTotal"
@@ -233,13 +237,23 @@ $.fn.barchart =  ->
   return this
 
 
-
-
 table_renderer =
-  "Table": (pvtData, opts) -> TableRenderer(pvtData, opts)
-  "Table Barchart": (pvtData, opts) -> $(TableRenderer(pvtData, opts)).barchart()
-  "Heatmap": (pvtData, opts) -> $(TableRenderer(pvtData, opts)).heatmap()
-  "Row Heatmap": (pvtData, opts) -> $(TableRenderer(pvtData, opts)).heatmap("rowheatmap")
-  "Col Heatmap": (pvtData, opts) -> $(TableRenderer(pvtData, opts)).heatmap("colheatmap")
+  "Table":
+    name: "Table"
+    render: (pvtData, opts) -> TableRenderer(pvtData, opts)
+  "Table Barchart":
+    name: "Table Barchart"
+    render: (pvtData, opts) -> $(TableRenderer(pvtData, opts)).barchart()
+  "Heatmap":
+    name: "Table Heatmap"
+    render: (pvtData, opts) -> $(TableRenderer(pvtData, opts)).heatmap()
+  "Row Heatmap":
+    name: "Table Row Heatmap"
+    render: (pvtData, opts) ->
+      $(TableRenderer(pvtData, opts)).heatmap("rowheatmap")
+  "Col Heatmap":
+    name: "Table Col Heatmap"
+    render: (pvtData, opts) ->
+      $(TableRenderer(pvtData, opts)).heatmap("colheatmap")
 
 $.extend $.pivotUtilities.renderers, table_renderer
