@@ -322,20 +322,30 @@ Default Renderer for hierarchical table layout
   };
 
   table_renderer = {
-    "Table": function(pvtData, opts) {
-      return TableRenderer(pvtData, opts);
+    "Table": {
+      render: function(pvtData, opts) {
+        return TableRenderer(pvtData, opts);
+      }
     },
-    "Table Barchart": function(pvtData, opts) {
-      return $(TableRenderer(pvtData, opts)).barchart();
+    "Table Barchart": {
+      render: function(pvtData, opts) {
+        return $(TableRenderer(pvtData, opts)).barchart();
+      }
     },
-    "Heatmap": function(pvtData, opts) {
-      return $(TableRenderer(pvtData, opts)).heatmap();
+    "Heatmap": {
+      render: function(pvtData, opts) {
+        return $(TableRenderer(pvtData, opts)).heatmap();
+      }
     },
-    "Row Heatmap": function(pvtData, opts) {
-      return $(TableRenderer(pvtData, opts)).heatmap("rowheatmap");
+    "Row Heatmap": {
+      render: function(pvtData, opts) {
+        return $(TableRenderer(pvtData, opts)).heatmap("rowheatmap");
+      }
     },
-    "Col Heatmap": function(pvtData, opts) {
-      return $(TableRenderer(pvtData, opts)).heatmap("colheatmap");
+    "Col Heatmap": {
+      render: function(pvtData, opts) {
+        return $(TableRenderer(pvtData, opts)).heatmap("colheatmap");
+      }
     }
   };
 
