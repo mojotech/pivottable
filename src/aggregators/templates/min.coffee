@@ -1,4 +1,5 @@
 Min = (formatter) -> ([attr]) -> (data, rowKey, colKey) ->
+  name: 'Min'
   smallest: null
   push: (record) ->
     if not isNaN parseFloat(record[attr])
@@ -6,7 +7,6 @@ Min = (formatter) -> ([attr]) -> (data, rowKey, colKey) ->
   value: -> @smallest
   format: formatter or $.pivotUtilities.formatterTemplates.default
   numInputs: 1
-
 
 
 min =

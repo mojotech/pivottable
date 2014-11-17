@@ -1,4 +1,5 @@
 Max = (formatter) -> ([attr]) -> (data, rowKey, colKey) ->
+  name: 'Max'
   largest: null
   push: (record) ->
     if not isNaN parseFloat(record[attr])
@@ -6,7 +7,6 @@ Max = (formatter) -> ([attr]) -> (data, rowKey, colKey) ->
   value: -> @largest
   format: formatter or $.pivotUtilities.formatterTemplates.default
   numInputs: 1
-
 
 
 max =
