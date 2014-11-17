@@ -7,6 +7,7 @@
       attr = _arg[0];
       return function(data, rowKey, colKey) {
         return {
+          name: 'Standard Deviation',
           avg: $.pivotUtilities.aggregatorTemplates.Average($.pivotUtilities.numberFormat())([attr])(data, rowKey, colKey),
           values: [],
           variance: 0,

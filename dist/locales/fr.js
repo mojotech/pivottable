@@ -42,12 +42,12 @@
       "Somme": tpl.Sum(frFmt),
       "Somme en entiers": tpl.Sum(frFmtInt),
       "Moyenne": tpl.Average(frFmt),
-      "Somme en proportion du totale": tpl.fractionOf(tpl.Sum(), "total", frFmtPct),
-      "Somme en proportion de la ligne": tpl.fractionOf(tpl.Sum(), "row", frFmtPct),
-      "Somme en proportion de la colonne": tpl.fractionOf(tpl.Sum(), "col", frFmtPct),
-      "Nombre en proportion du totale": tpl.fractionOf(tpl.Count(), "total", frFmtPct),
-      "Nombre en proportion de la ligne": tpl.fractionOf(tpl.Count(), "row", frFmtPct),
-      "Nombre en proportion de la colonne": tpl.fractionOf(tpl.Count(), "col", frFmtPct)
+      "Somme en proportion du totale": tpl.fractionOf(tpl.Sum(), "Somme en proportion du totale", "total", frFmtPct),
+      "Somme en proportion de la ligne": tpl.fractionOf(tpl.Sum(), "Somme en proportion de la ligne", "row", frFmtPct),
+      "Somme en proportion de la colonne": tpl.fractionOf(tpl.Sum(), "Somme en proportion de la colonne", "col", frFmtPct),
+      "Nombre en proportion du totale": tpl.fractionOf(tpl.Count(), "Nombre en proportion du totale", "total", frFmtPct),
+      "Nombre en proportion de la ligne": tpl.fractionOf(tpl.Count(), "Nombre en proportion de la ligne", "row", frFmtPct),
+      "Nombre en proportion de la colonne": tpl.fractionOf(tpl.Count(), "Nombre en proportion de la colonne", "col", frFmtPct)
     },
     renderers: {
       "Table": $.pivotUtilities.renderers["Table"],

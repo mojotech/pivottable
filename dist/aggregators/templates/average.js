@@ -7,6 +7,7 @@
       attr = _arg[0];
       return function(data, rowKey, colKey) {
         return {
+          name: 'Average',
           sum: 0,
           len: 0,
           push: function(record) {
