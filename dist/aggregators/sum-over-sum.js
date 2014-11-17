@@ -7,6 +7,7 @@
       num = _arg[0], denom = _arg[1];
       return function(data, rowKey, colKey) {
         return {
+          name: 'Sum over Sum',
           sumNum: 0,
           sumDenom: 0,
           push: function(record) {

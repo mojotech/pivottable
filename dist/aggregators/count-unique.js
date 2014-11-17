@@ -8,6 +8,7 @@
       attr = _arg[0];
       return function(data, rowKey, colKey) {
         return {
+          name: 'Count Unique',
           uniq: [],
           push: function(record) {
             var _ref;

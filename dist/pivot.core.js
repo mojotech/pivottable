@@ -61,7 +61,10 @@
   };
 
   aggregatorTemplates = {
-    fractionOf: function(wrapped, type, formatter) {
+    fractionOf: function(wrapped, name, type, formatter) {
+      if (name == null) {
+        name = "Fraction Of";
+      }
       if (type == null) {
         type = "total";
       }
@@ -73,7 +76,7 @@
         x = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
         return function(data, rowKey, colKey) {
           return {
-            name: "fractionOf",
+            name: name,
             selector: {
               total: [[], []],
               row: [rowKey, []],
@@ -85,7 +88,7 @@
             },
             format: formatter,
             value: function() {
-              return this.inner.value() / data.getAggregator.apply(data, this.selector).getWrappedAggregator("fractionOf").inner.value();
+              return this.inner.value() / data.getAggregator.apply(data, this.selector).getWrappedAggregator(name).inner.value();
             },
             numInputs: wrapped.apply(null, x)().numInputs
           };

@@ -1,7 +1,7 @@
 (function() {
   var SumOverSumBound80, sumOverSumBound80;
 
-  SumOverSumBound80 = function(formatter, upper) {
+  SumOverSumBound80 = function(name, formatter, upper) {
     if (upper == null) {
       upper = true;
     }
@@ -10,6 +10,7 @@
       num = _arg[0], denom = _arg[1];
       return function(data, rowKey, colKey) {
         return {
+          name: name,
           sumNum: 0,
           sumDenom: 0,
           push: function(record) {
@@ -33,8 +34,8 @@
   };
 
   sumOverSumBound80 = {
-    "80% Upper Bound": SumOverSumBound80($.pivotUtilities.numberFormat()),
-    "80% Lower Bound": SumOverSumBound80($.pivotUtilities.numberFormat(), false)
+    "80% Upper Bound": SumOverSumBound80('80% Upper Bound', $.pivotUtilities.numberFormat()),
+    "80% Lower Bound": SumOverSumBound80('80% Lower Bound', $.pivotUtilities.numberFormat(), false)
   };
 
   $.extend($.pivotUtilities.aggregators, sumOverSumBound80);

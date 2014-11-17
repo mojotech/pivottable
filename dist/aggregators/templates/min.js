@@ -7,6 +7,7 @@
       attr = _arg[0];
       return function(data, rowKey, colKey) {
         return {
+          name: 'Min',
           smallest: null,
           push: function(record) {
             if (!isNaN(parseFloat(record[attr]))) {

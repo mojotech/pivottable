@@ -7,6 +7,7 @@
       attr = _arg[0];
       return function(data, rowKey, colKey) {
         return {
+          name: 'Count',
           count: 0,
           push: function() {
             return this.count++;
