@@ -1,4 +1,5 @@
-SumOverSumBound80 = (formatter, upper=true) -> ([num, denom]) -> (data, rowKey, colKey) ->
+SumOverSumBound80 = (name, formatter, upper=true) -> ([num, denom]) -> (data, rowKey, colKey) ->
+  name: name
   sumNum: 0
   sumDenom: 0
   push: (record) ->
@@ -13,9 +14,8 @@ SumOverSumBound80 = (formatter, upper=true) -> ([num, denom]) -> (data, rowKey, 
   numInputs: 2
 
 
-
 sumOverSumBound80 =
-  "80% Upper Bound": SumOverSumBound80($.pivotUtilities.numberFormat())
-  "80% Lower Bound": SumOverSumBound80($.pivotUtilities.numberFormat(), false)
+  "80% Upper Bound": SumOverSumBound80('80% Upper Bound', $.pivotUtilities.numberFormat())
+  "80% Lower Bound": SumOverSumBound80('80% Lower Bound', $.pivotUtilities.numberFormat(), false)
 
 $.extend $.pivotUtilities.aggregators, sumOverSumBound80

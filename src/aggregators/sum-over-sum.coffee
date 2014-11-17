@@ -1,4 +1,5 @@
 SumOverSum = (formatter) -> ([num, denom]) -> (data, rowKey, colKey) ->
+  name: 'Sum over Sum'
   sumNum: 0
   sumDenom: 0
   push: (record) ->
@@ -7,7 +8,6 @@ SumOverSum = (formatter) -> ([num, denom]) -> (data, rowKey, colKey) ->
   value: -> @sumNum/@sumDenom
   format: formatter or $.pivotUtilities.formatterTemplates.default
   numInputs: 2
-
 
 
 sumOverSum =

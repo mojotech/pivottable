@@ -1,4 +1,5 @@
 StdDev = (formatter) -> ([attr]) -> (data, rowKey, colKey) ->
+  name: 'Standard Deviation'
   avg: $.pivotUtilities.aggregatorTemplates.Average($.pivotUtilities.numberFormat())([attr])(data, rowKey, colKey)
   values: []
   variance: 0

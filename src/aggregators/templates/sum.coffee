@@ -1,10 +1,10 @@
 Sum = (formatter) -> ([attr]) -> (data, rowKey, colKey) ->
+  name: 'Sum'
   sum: 0
   push: (record) -> @sum += parseFloat(record[attr]) if not isNaN parseFloat(record[attr])
   value: -> @sum
   format: formatter or $.pivotUtilities.formatterTemplates.default
   numInputs: 1
-
 
 
 sum =

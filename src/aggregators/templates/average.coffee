@@ -1,4 +1,5 @@
 Average = (formatter) -> ([attr]) -> (data, rowKey, colKey) ->
+  name: 'Average'
   sum: 0
   len: 0
   push: (record) ->
@@ -8,7 +9,6 @@ Average = (formatter) -> ([attr]) -> (data, rowKey, colKey) ->
   value: -> @sum/@len
   format: formatter or $.pivotUtilities.formatterTemplates.default
   numInputs: 1
-
 
 
 average =

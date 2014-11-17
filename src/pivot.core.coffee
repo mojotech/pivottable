@@ -32,13 +32,13 @@ formatterTemplates =
 
 #aggregator templates default to US number formatting but this is overrideable
 aggregatorTemplates =
-  fractionOf: (wrapped, type="total", formatter=formatterTemplates.percentFormat) -> (x...) -> (data, rowKey, colKey) ->
-    name: "fractionOf"
+  fractionOf: (wrapped, name="Fraction Of", type="total", formatter=formatterTemplates.percentFormat) -> (x...) -> (data, rowKey, colKey) ->
+    name: name
     selector: {total:[[],[]],row:[rowKey,[]],col:[[],colKey]}[type]
     inner: wrapped(x...)(data, rowKey, colKey)
     push: (record) -> @inner.push record
     format: formatter
-    value: -> @inner.value() / data.getAggregator(@selector...).getWrappedAggregator("fractionOf").inner.value()
+    value: -> @inner.value() / data.getAggregator(@selector...).getWrappedAggregator(name).inner.value()
     numInputs: wrapped(x...)().numInputs
 
 #default aggregators & renderers use US naming and number formatting

@@ -1,4 +1,5 @@
 CountUnique = (formatter) -> ([attr]) -> (data, rowKey, colKey) ->
+  name: 'Count Unique'
   uniq: []
   push: (record) -> @uniq.push(record[attr]) if record[attr] not in @uniq
   value: -> @uniq.length

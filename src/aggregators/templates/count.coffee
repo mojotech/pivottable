@@ -1,9 +1,9 @@
 Count = (formatter) -> ([attr]) -> (data, rowKey, colKey) ->
+  name: 'Count'
   count: 0
   push:  -> @count++
   value: -> @count
   format: formatter or $.pivotUtilities.formatterTemplates.default
-
 
 
 count =
