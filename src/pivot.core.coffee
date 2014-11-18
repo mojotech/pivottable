@@ -266,7 +266,7 @@ $.fn.pivot = (input, opts) ->
   try
     pivotData = new PivotData(input, opts)
     try
-      result = opts.renderer(pivotData, opts.rendererOptions)
+      result = opts.renderer.render(pivotData, opts.rendererOptions)
     catch e
       console.error(e.stack) if console?
       result = $("<span>").html opts.localeStrings.renderError

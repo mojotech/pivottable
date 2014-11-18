@@ -236,10 +236,10 @@ $.fn.barchart =  ->
 
 
 table_renderer =
-  "Table": (pvtData, opts) -> TableRenderer(pvtData, opts)
-  "Table Barchart": (pvtData, opts) -> $(TableRenderer(pvtData, opts)).barchart()
-  "Heatmap": (pvtData, opts) -> $(TableRenderer(pvtData, opts)).heatmap()
-  "Row Heatmap": (pvtData, opts) -> $(TableRenderer(pvtData, opts)).heatmap("rowheatmap")
-  "Col Heatmap": (pvtData, opts) -> $(TableRenderer(pvtData, opts)).heatmap("colheatmap")
+  "Table": render: (pvtData, opts) -> TableRenderer(pvtData, opts)
+  "Table Barchart": render: (pvtData, opts) -> $(TableRenderer(pvtData, opts)).barchart()
+  "Heatmap": render: (pvtData, opts) -> $(TableRenderer(pvtData, opts)).heatmap()
+  "Row Heatmap": render: (pvtData, opts) -> $(TableRenderer(pvtData, opts)).heatmap("rowheatmap")
+  "Col Heatmap": render: (pvtData, opts) -> $(TableRenderer(pvtData, opts)).heatmap("colheatmap")
 
 $.extend $.pivotUtilities.renderers, table_renderer
