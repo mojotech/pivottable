@@ -482,7 +482,7 @@
     try {
       pivotData = new PivotData(input, opts);
       try {
-        result = opts.renderer(pivotData, opts.rendererOptions);
+        result = opts.renderer.render(pivotData, opts.rendererOptions);
       } catch (_error) {
         e = _error;
         if (typeof console !== "undefined" && console !== null) {
