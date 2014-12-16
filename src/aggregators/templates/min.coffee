@@ -10,7 +10,7 @@ Min = (formatter) -> ([attr]) -> (data, rowKey, colKey) ->
 
 
 min =
-  "Min": Min()
+  "Min": Min($.pivotUtilities.numberFormat())
 
 $.extend $.pivotUtilities.aggregators, min
 
