@@ -36,7 +36,7 @@
   };
 
   stddev = {
-    "Standard Deviation": StdDev()
+    "Standard Deviation": StdDev($.pivotUtilities.numberFormat())
   };
 
   $.extend($.pivotUtilities.aggregators, stddev);
