@@ -10,7 +10,7 @@ Max = (formatter) -> ([attr]) -> (data, rowKey, colKey) ->
 
 
 max =
-  "Max": Max()
+  "Max": Max($.pivotUtilities.numberFormat())
 
 $.extend $.pivotUtilities.aggregators, max
 

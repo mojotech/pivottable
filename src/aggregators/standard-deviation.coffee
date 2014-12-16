@@ -23,7 +23,7 @@ StdDev = (formatter) -> ([attr]) -> (data, rowKey, colKey) ->
 
 
 stddev =
-  "Standard Deviation": StdDev()
+  "Standard Deviation": StdDev($.pivotUtilities.numberFormat())
 
 $.extend $.pivotUtilities.aggregators, stddev
 
