@@ -8,7 +8,7 @@ Default Renderer for hierarchical table layout
     __hasProp = {}.hasOwnProperty;
 
   TableRenderer = function(pivotData, opts) {
-    var aggregator, c, colAttrs, colKey, colKeys, defaults, i, j, r, result, rowAttrs, rowKey, rowKeys, spanSize, td, th, totalAggregator, tr, txt, val, x;
+    var aggregator, c, colAttrs, colKey, colKeys, defaults, formattedVal, i, j, r, result, rowAttrs, rowKey, rowKeys, spanSize, td, th, totalAggregator, tr, txt, val, x;
     defaults = {
       localeStrings: {
         totals: "Totals"
@@ -131,7 +131,8 @@ Default Renderer for hierarchical table layout
         val = aggregator.value();
         td = document.createElement("td");
         td.className = "pvtVal row" + i + " col" + j;
-        td.innerHTML = aggregator.format(val);
+        formattedVal = aggregator.format(val);
+        td.innerHTML = (typeof formattedVal.join === "function" ? formattedVal.join(" | ") : void 0) || formattedVal;
         td.setAttribute("data-value", val);
         tr.appendChild(td);
       }
