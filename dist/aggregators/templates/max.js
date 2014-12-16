@@ -27,7 +27,7 @@
   };
 
   max = {
-    "Max": Max()
+    "Max": Max($.pivotUtilities.numberFormat())
   };
 
   $.extend($.pivotUtilities.aggregators, max);

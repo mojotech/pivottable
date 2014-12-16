@@ -27,7 +27,7 @@
   };
 
   min = {
-    "Min": Min()
+    "Min": Min($.pivotUtilities.numberFormat())
   };
 
   $.extend($.pivotUtilities.aggregators, min);
