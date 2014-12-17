@@ -100,7 +100,8 @@ TableRenderer = (pivotData, opts) ->
       val = aggregator.value()
       td = document.createElement("td")
       td.className = "pvtVal row#{i} col#{j}"
-      td.innerHTML = aggregator.format(val)
+      formattedVal = aggregator.format(val)
+      td.innerHTML = formattedVal.join?(" | ") or formattedVal
       td.setAttribute("data-value", val)
       tr.appendChild td
 

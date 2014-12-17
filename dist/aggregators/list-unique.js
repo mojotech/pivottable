@@ -17,7 +17,7 @@
             }
           },
           value: function() {
-            return this.uniq.join(", ");
+            return this.uniq.join(" | ");
           },
           format: formatter || $.pivotUtilities.formatterTemplates["default"],
           numInputs: 1
