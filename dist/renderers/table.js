@@ -140,7 +140,8 @@ Default Renderer for hierarchical table layout
       val = totalAggregator.value();
       td = document.createElement("td");
       td.className = "pvtTotal rowTotal";
-      td.innerHTML = totalAggregator.format(val);
+      formattedVal = totalAggregator.format(val);
+      td.innerHTML = (typeof formattedVal.join === "function" ? formattedVal.join(" | ") : void 0) || formattedVal;
       td.setAttribute("data-value", val);
       td.setAttribute("data-for", "row" + i);
       tr.appendChild(td);
@@ -159,7 +160,8 @@ Default Renderer for hierarchical table layout
       val = totalAggregator.value();
       td = document.createElement("td");
       td.className = "pvtTotal colTotal";
-      td.innerHTML = totalAggregator.format(val);
+      formattedVal = totalAggregator.format(val);
+      td.innerHTML = (typeof formattedVal.join === "function" ? formattedVal.join(" | ") : void 0) || formattedVal;
       td.setAttribute("data-value", val);
       td.setAttribute("data-for", "col" + j);
       tr.appendChild(td);
@@ -168,7 +170,8 @@ Default Renderer for hierarchical table layout
     val = totalAggregator.value();
     td = document.createElement("td");
     td.className = "pvtGrandTotal";
-    td.innerHTML = totalAggregator.format(val);
+    formattedVal = totalAggregator.format(val);
+    td.innerHTML = (typeof formattedVal.join === "function" ? formattedVal.join(" | ") : void 0) || formattedVal;
     td.setAttribute("data-value", val);
     tr.appendChild(td);
     result.appendChild(tr);
