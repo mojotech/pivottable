@@ -210,20 +210,37 @@ $.fn.barchart =  ->
 
     values = []
     forEachCell (x) -> values.push x
+    # set max and min values
     max = Math.max(values...)
-    scaler = (x) -> 100*x/(1.4*max)
+    min = Math.min(values...)
+
+    # set bound to 0 if either all positive or all negative
+    max = 0 if max < 0
+    min = 0 if min > 0
+
+    # send back what percentage of the range the number is, and whether it is positive or negative
+    scaler = (x) ->
+      value: Math.abs(x)/(max-min)*100
+      positive: x > 0
+
+    # find the height percentage of the most negative number
+    bottom = if min is 0 then min else scaler(min).value
+
     forEachCell (x, elem) ->
       text = elem.text()
       wrapper = $("<div>").css
         "position": "relative"
         "height": "55px"
+
+      cell = scaler(x)
       wrapper.append $("<div>").css
         "position": "absolute"
-        "bottom": 0
         "left": 0
         "right": 0
-        "height": scaler(x) + "%"
-        "background-color": "gray"
+        "height": "#{cell.value}%"
+        "bottom": if cell.positive then "#{bottom}%" else "#{bottom-cell.value}%"
+        "background-color": if cell.positive then "#AAA" else "#FF4B4B"
+
       wrapper.append $("<div>").text(text).css
         "position":"relative"
         "padding-left":"5px"
