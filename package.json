@@ -1,6 +1,6 @@
 {
   "name": "pivottable",
-  "version": "1.4.3",
+  "version": "1.4.4",
   "description": "PivotTable.js is a Javascript Pivot Table library with drag'n'drop functionality",
   "main": "pivot.coffee",
   "directories": {

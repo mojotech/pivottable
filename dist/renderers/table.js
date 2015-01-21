@@ -272,7 +272,7 @@ Default Renderer for hierarchical table layout
     numCols = this.data("numcols");
     barcharter = (function(_this) {
       return function(scope) {
-        var forEachCell, max, scaler, values;
+        var bottom, forEachCell, max, min, scaler, values;
         forEachCell = function(f) {
           return _this.find(scope).each(function() {
             var x;
@@ -287,23 +287,35 @@ Default Renderer for hierarchical table layout
           return values.push(x);
         });
         max = Math.max.apply(Math, values);
+        min = Math.min.apply(Math, values);
+        if (max < 0) {
+          max = 0;
+        }
+        if (min > 0) {
+          min = 0;
+        }
         scaler = function(x) {
-          return 100 * x / (1.4 * max);
+          return {
+            value: Math.abs(x) / (max - min) * 100,
+            positive: x > 0
+          };
         };
+        bottom = min === 0 ? min : scaler(min).value;
         return forEachCell(function(x, elem) {
-          var text, wrapper;
+          var cell, text, wrapper;
           text = elem.text();
           wrapper = $("<div>").css({
             "position": "relative",
             "height": "55px"
           });
+          cell = scaler(x);
           wrapper.append($("<div>").css({
             "position": "absolute",
-            "bottom": 0,
             "left": 0,
             "right": 0,
-            "height": scaler(x) + "%",
-            "background-color": "gray"
+            "height": "" + cell.value + "%",
+            "bottom": cell.positive ? "" + bottom + "%" : "" + (bottom - cell.value) + "%",
+            "background-color": cell.positive ? "#AAA" : "#DE2222"
           }));
           wrapper.append($("<div>").text(text).css({
             "position": "relative",
