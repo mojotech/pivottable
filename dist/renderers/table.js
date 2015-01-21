@@ -315,7 +315,7 @@ Default Renderer for hierarchical table layout
             "right": 0,
             "height": "" + cell.value + "%",
             "bottom": cell.positive ? "" + bottom + "%" : "" + (bottom - cell.value) + "%",
-            "background-color": cell.positive ? "#AAA" : "#DE2222"
+            "background-color": cell.positive ? "#AAA" : "#FF4B4B"
           }));
           wrapper.append($("<div>").text(text).css({
             "position": "relative",
