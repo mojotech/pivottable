@@ -239,7 +239,7 @@ $.fn.barchart =  ->
         "right": 0
         "height": "#{cell.value}%"
         "bottom": if cell.positive then "#{bottom}%" else "#{bottom-cell.value}%"
-        "background-color": if cell.positive then "#AAA" else "#DE2222"
+        "background-color": if cell.positive then "#AAA" else "#FF4B4B"
 
       wrapper.append $("<div>").text(text).css
         "position":"relative"
