@@ -32,7 +32,7 @@ TableRenderer = (pivotData, opts) ->
     while i+len < arr.length
       stop = false
       for x in [0..j]
-        stop = true if arr[i][x] != arr[i+len][x]
+        stop = true if arr[i][x] isnt arr[i+len][x]
       break if stop
       len++
     return len
@@ -40,7 +40,7 @@ TableRenderer = (pivotData, opts) ->
   #the first few rows are for col headers
   for own j, c of colAttrs
     tr = document.createElement("tr")
-    if parseInt(j) == 0 and rowAttrs.length != 0
+    if parseInt(j, 10) is 0 and rowAttrs.length isnt 0
       th = document.createElement("th")
       th.setAttribute("colspan", rowAttrs.length)
       th.setAttribute("rowspan", colAttrs.length)
@@ -50,7 +50,7 @@ TableRenderer = (pivotData, opts) ->
     th.textContent = c
     tr.appendChild th
     for own i, colKey of colKeys
-      x = spanSize(colKeys, parseInt(i), parseInt(j))
+      x = spanSize(colKeys, parseInt(i, 10), parseInt(j, 10))
       if x != -1
         th = document.createElement("th")
         th.className = "pvtColLabel"
@@ -59,7 +59,7 @@ TableRenderer = (pivotData, opts) ->
         if parseInt(j) == colAttrs.length-1 and rowAttrs.length != 0
           th.setAttribute("rowspan", 2)
         tr.appendChild th
-    if parseInt(j) == 0
+    if parseInt(j, 10) is 0
       th = document.createElement("th")
       th.className = "pvtTotalLabel"
       th.innerHTML = opts.localeStrings.totals
@@ -76,7 +76,7 @@ TableRenderer = (pivotData, opts) ->
       th.textContent = r
       tr.appendChild th
     th = document.createElement("th")
-    if colAttrs.length ==0
+    if colAttrs.length is 0
       th.className = "pvtTotalLabel"
       th.innerHTML = opts.localeStrings.totals
     tr.appendChild th
@@ -86,13 +86,13 @@ TableRenderer = (pivotData, opts) ->
   for own i, rowKey of rowKeys
     tr = document.createElement("tr")
     for own j, txt of rowKey
-      x = spanSize(rowKeys, parseInt(i), parseInt(j))
+      x = spanSize(rowKeys, parseInt(i, 10), parseInt(j, 10))
       if x != -1
         th = document.createElement("th")
         th.className = "pvtRowLabel"
         th.textContent = txt
         th.setAttribute("rowspan", x)
-        if parseInt(j) == rowAttrs.length-1 and colAttrs.length !=0
+        if parseInt(j, 10) is rowAttrs.length-1 and colAttrs.length isnt 0
           th.setAttribute("colspan",2)
         tr.appendChild th
     for own j, colKey of colKeys #this is the tight loop
