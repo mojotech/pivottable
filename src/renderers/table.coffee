@@ -146,6 +146,7 @@ TableRenderer = (pivotData, opts) ->
   #squirrel this away for later
   result.setAttribute("data-numrows", rowKeys.length)
   result.setAttribute("data-numcols", colKeys.length)
+  result.setAttribute("width", "100%")
 
   return result
 
