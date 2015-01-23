@@ -15,6 +15,9 @@ TableRenderer = (pivotData, opts) ->
   rowKeys = pivotData.getRowKeys()
   colKeys = pivotData.getColKeys()
 
+  aggregators = opts.aggregators?.map (agg) ->
+    "#{agg.name}#{if agg.values.length then '(' + agg.values.join(', ') + ')' else ''}"
+
   #now actually build the output
   result = document.createElement("table")
   result.className = "pvtTable"
@@ -55,15 +58,16 @@ TableRenderer = (pivotData, opts) ->
         th = document.createElement("th")
         th.className = "pvtColLabel"
         th.textContent = colKey[j]
-        th.setAttribute("colspan", x)
-        if parseInt(j) == colAttrs.length-1 and rowAttrs.length != 0
+        th.setAttribute("colspan", x * aggregators.length)
+        if parseInt(j, 10) is colAttrs.length-1 and rowAttrs.length isnt 0 and aggregators.length is 1
           th.setAttribute("rowspan", 2)
         tr.appendChild th
     if parseInt(j, 10) is 0
       th = document.createElement("th")
       th.className = "pvtTotalLabel"
       th.innerHTML = opts.localeStrings.totals
-      th.setAttribute("rowspan", colAttrs.length + (if rowAttrs.length ==0 then 0 else 1))
+      th.setAttribute("colspan", aggregators.length)
+      th.setAttribute("rowspan", colAttrs.length + (if rowAttrs.length is 0 then 0 else (if aggregators.length is 1 then 1 else 0)))
       tr.appendChild th
     result.appendChild tr
 
@@ -80,6 +84,16 @@ TableRenderer = (pivotData, opts) ->
       th.className = "pvtTotalLabel"
       th.innerHTML = opts.localeStrings.totals
     tr.appendChild th
+
+    if aggregators.length > 1
+      # show multiple aggregators col headings
+      for x in [0..colKeys.length]
+        for agg, idx in aggregators
+          th = document.createElement("th")
+          th.className = "pvtColLabel"
+          th.textContent = agg
+          tr.appendChild th
+
     result.appendChild tr
 
   #now the actual data rows, with their row headers and totals
@@ -98,22 +112,41 @@ TableRenderer = (pivotData, opts) ->
     for own j, colKey of colKeys #this is the tight loop
       aggregator = pivotData.getAggregator(rowKey, colKey)
       val = aggregator.value()
-      td = document.createElement("td")
-      td.className = "pvtVal row#{i} col#{j}"
       formattedVal = aggregator.format(val)
-      td.innerHTML = formattedVal.join?(" | ") or formattedVal
-      td.setAttribute("data-value", val)
-      tr.appendChild td
+
+      if aggregators.length > 1
+        for agg, idx in aggregators
+          td = document.createElement("td")
+          td.className = "pvtVal row#{i} col#{j}"
+          td.innerHTML = formattedVal[idx] ? formattedVal
+          td.setAttribute("data-value", (val?[idx] ? val))
+          tr.appendChild td
+      else
+        td = document.createElement("td")
+        td.className = "pvtVal row#{i} col#{j}"
+        td.innerHTML = formattedVal.join?(" | ") or formattedVal
+        td.setAttribute("data-value", val)
+        tr.appendChild td
 
     totalAggregator = pivotData.getAggregator(rowKey, [])
     val = totalAggregator.value()
-    td = document.createElement("td")
-    td.className = "pvtTotal rowTotal"
     formattedVal = totalAggregator.format(val)
-    td.innerHTML = formattedVal.join?(" | ") or formattedVal
-    td.setAttribute("data-value", val)
-    td.setAttribute("data-for", "row"+i)
-    tr.appendChild td
+    if aggregators.length > 1
+      for agg, idx in aggregators
+        td = document.createElement("td")
+        td.className = "pvtTotal rowTotal"
+        td.innerHTML = formattedVal[idx] ? formattedVal
+        td.setAttribute("data-value", (val?[idx] ? val))
+        td.setAttribute("data-for", "row"+i)
+        tr.appendChild td
+    else
+      td = document.createElement("td")
+      td.className = "pvtTotal rowTotal"
+      td.innerHTML = formattedVal.join?(" | ") or formattedVal
+      td.setAttribute("data-value", val)
+      td.setAttribute("data-for", "row"+i)
+      tr.appendChild td
+
     result.appendChild tr
 
   #finally, the row for col totals, and a grand total
@@ -126,22 +159,43 @@ TableRenderer = (pivotData, opts) ->
   for own j, colKey of colKeys
     totalAggregator = pivotData.getAggregator([], colKey)
     val = totalAggregator.value()
-    td = document.createElement("td")
-    td.className = "pvtTotal colTotal"
     formattedVal = totalAggregator.format(val)
-    td.innerHTML = formattedVal.join?(" | ") or formattedVal
-    td.setAttribute("data-value", val)
-    td.setAttribute("data-for", "col"+j)
-    tr.appendChild td
+
+    if aggregators.length > 1
+      for agg, idx in aggregators
+        td = document.createElement("td")
+        td.className = "pvtTotal colTotal"
+        td.innerHTML = formattedVal[idx] ? formattedVal
+        td.setAttribute("data-value", (val[idx] ? val))
+        td.setAttribute("data-for", "col"+j)
+        tr.appendChild td
+    else
+      td = document.createElement("td")
+      td.className = "pvtTotal colTotal"
+      td.innerHTML = formattedVal.join?(" | ") or formattedVal
+      td.setAttribute("data-value", val)
+      td.setAttribute("data-for", "col"+j)
+      tr.appendChild td
+
   totalAggregator = pivotData.getAggregator([], [])
   val = totalAggregator.value()
-  td = document.createElement("td")
-  td.className = "pvtGrandTotal"
   formattedVal = totalAggregator.format(val)
-  td.innerHTML = formattedVal.join?(" | ") or formattedVal
-  td.setAttribute("data-value", val)
-  tr.appendChild td
-  result.appendChild tr
+
+  if aggregators.length > 1
+    for agg, idx in aggregators
+      td = document.createElement("td")
+      td.className = "pvtGrandTotal"
+      td.innerHTML = formattedVal[idx] ? formattedVal
+      td.setAttribute("data-value", (val[idx] ? val))
+      tr.appendChild td
+      result.appendChild tr
+  else
+    td = document.createElement("td")
+    td.className = "pvtGrandTotal"
+    td.innerHTML = formattedVal.join?(" | ") or formattedVal
+    td.setAttribute("data-value", val)
+    tr.appendChild td
+    result.appendChild tr
 
   #squirrel this away for later
   result.setAttribute("data-numrows", rowKeys.length)
