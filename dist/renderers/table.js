@@ -8,7 +8,7 @@ Default Renderer for hierarchical table layout
     __hasProp = {}.hasOwnProperty;
 
   TableRenderer = function(pivotData, opts) {
-    var aggregator, c, colAttrs, colKey, colKeys, defaults, formattedVal, i, j, r, result, rowAttrs, rowKey, rowKeys, spanSize, td, th, totalAggregator, tr, txt, val, x;
+    var agg, aggregator, aggregators, c, colAttrs, colKey, colKeys, defaults, formattedVal, i, idx, j, r, result, rowAttrs, rowKey, rowKeys, spanSize, td, th, totalAggregator, tr, txt, val, x, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _m, _n, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9;
     defaults = {
       localeStrings: {
         totals: "Totals"
@@ -19,6 +19,9 @@ Default Renderer for hierarchical table layout
     rowAttrs = pivotData.rowAttrs;
     rowKeys = pivotData.getRowKeys();
     colKeys = pivotData.getColKeys();
+    aggregators = (_ref = opts.aggregators) != null ? _ref.map(function(agg) {
+      return "" + agg.name + (agg.values.length ? '(' + agg.values.join(', ') + ')' : '');
+    }) : void 0;
     result = document.createElement("table");
     result.className = "pvtTable";
     spanSize = function(arr, i, j) {
@@ -53,7 +56,7 @@ Default Renderer for hierarchical table layout
       if (!__hasProp.call(colAttrs, j)) continue;
       c = colAttrs[j];
       tr = document.createElement("tr");
-      if (parseInt(j) === 0 && rowAttrs.length !== 0) {
+      if (parseInt(j, 10) === 0 && rowAttrs.length !== 0) {
         th = document.createElement("th");
         th.setAttribute("colspan", rowAttrs.length);
         th.setAttribute("rowspan", colAttrs.length);
@@ -66,23 +69,24 @@ Default Renderer for hierarchical table layout
       for (i in colKeys) {
         if (!__hasProp.call(colKeys, i)) continue;
         colKey = colKeys[i];
-        x = spanSize(colKeys, parseInt(i), parseInt(j));
+        x = spanSize(colKeys, parseInt(i, 10), parseInt(j, 10));
         if (x !== -1) {
           th = document.createElement("th");
           th.className = "pvtColLabel";
           th.textContent = colKey[j];
-          th.setAttribute("colspan", x);
-          if (parseInt(j) === colAttrs.length - 1 && rowAttrs.length !== 0) {
+          th.setAttribute("colspan", x * aggregators.length);
+          if (parseInt(j, 10) === colAttrs.length - 1 && rowAttrs.length !== 0 && aggregators.length === 1) {
             th.setAttribute("rowspan", 2);
           }
           tr.appendChild(th);
         }
       }
-      if (parseInt(j) === 0) {
+      if (parseInt(j, 10) === 0) {
         th = document.createElement("th");
         th.className = "pvtTotalLabel";
         th.innerHTML = opts.localeStrings.totals;
-        th.setAttribute("rowspan", colAttrs.length + (rowAttrs.length === 0 ? 0 : 1));
+        th.setAttribute("colspan", aggregators.length);
+        th.setAttribute("rowspan", colAttrs.length + (rowAttrs.length === 0 ? 0 : (aggregators.length === 1 ? 1 : 0)));
         tr.appendChild(th);
       }
       result.appendChild(tr);
@@ -103,6 +107,17 @@ Default Renderer for hierarchical table layout
         th.innerHTML = opts.localeStrings.totals;
       }
       tr.appendChild(th);
+      if (aggregators.length > 1) {
+        for (x = _i = 0, _ref1 = colKeys.length; 0 <= _ref1 ? _i <= _ref1 : _i >= _ref1; x = 0 <= _ref1 ? ++_i : --_i) {
+          for (idx = _j = 0, _len = aggregators.length; _j < _len; idx = ++_j) {
+            agg = aggregators[idx];
+            th = document.createElement("th");
+            th.className = "pvtColLabel";
+            th.textContent = agg;
+            tr.appendChild(th);
+          }
+        }
+      }
       result.appendChild(tr);
     }
     for (i in rowKeys) {
@@ -112,13 +127,13 @@ Default Renderer for hierarchical table layout
       for (j in rowKey) {
         if (!__hasProp.call(rowKey, j)) continue;
         txt = rowKey[j];
-        x = spanSize(rowKeys, parseInt(i), parseInt(j));
+        x = spanSize(rowKeys, parseInt(i, 10), parseInt(j, 10));
         if (x !== -1) {
           th = document.createElement("th");
           th.className = "pvtRowLabel";
           th.textContent = txt;
           th.setAttribute("rowspan", x);
-          if (parseInt(j) === rowAttrs.length - 1 && colAttrs.length !== 0) {
+          if (parseInt(j, 10) === rowAttrs.length - 1 && colAttrs.length !== 0) {
             th.setAttribute("colspan", 2);
           }
           tr.appendChild(th);
@@ -129,22 +144,45 @@ Default Renderer for hierarchical table layout
         colKey = colKeys[j];
         aggregator = pivotData.getAggregator(rowKey, colKey);
         val = aggregator.value();
-        td = document.createElement("td");
-        td.className = "pvtVal row" + i + " col" + j;
         formattedVal = aggregator.format(val);
-        td.innerHTML = (typeof formattedVal.join === "function" ? formattedVal.join(" | ") : void 0) || formattedVal;
-        td.setAttribute("data-value", val);
-        tr.appendChild(td);
+        if (aggregators.length > 1) {
+          for (idx = _k = 0, _len1 = aggregators.length; _k < _len1; idx = ++_k) {
+            agg = aggregators[idx];
+            td = document.createElement("td");
+            td.className = "pvtVal row" + i + " col" + j;
+            td.innerHTML = (_ref2 = formattedVal[idx]) != null ? _ref2 : formattedVal;
+            td.setAttribute("data-value", (_ref3 = val != null ? val[idx] : void 0) != null ? _ref3 : val);
+            tr.appendChild(td);
+          }
+        } else {
+          td = document.createElement("td");
+          td.className = "pvtVal row" + i + " col" + j;
+          td.innerHTML = (typeof formattedVal.join === "function" ? formattedVal.join(" | ") : void 0) || formattedVal;
+          td.setAttribute("data-value", val);
+          tr.appendChild(td);
+        }
       }
       totalAggregator = pivotData.getAggregator(rowKey, []);
       val = totalAggregator.value();
-      td = document.createElement("td");
-      td.className = "pvtTotal rowTotal";
       formattedVal = totalAggregator.format(val);
-      td.innerHTML = (typeof formattedVal.join === "function" ? formattedVal.join(" | ") : void 0) || formattedVal;
-      td.setAttribute("data-value", val);
-      td.setAttribute("data-for", "row" + i);
-      tr.appendChild(td);
+      if (aggregators.length > 1) {
+        for (idx = _l = 0, _len2 = aggregators.length; _l < _len2; idx = ++_l) {
+          agg = aggregators[idx];
+          td = document.createElement("td");
+          td.className = "pvtTotal rowTotal";
+          td.innerHTML = (_ref4 = formattedVal[idx]) != null ? _ref4 : formattedVal;
+          td.setAttribute("data-value", (_ref5 = val != null ? val[idx] : void 0) != null ? _ref5 : val);
+          td.setAttribute("data-for", "row" + i);
+          tr.appendChild(td);
+        }
+      } else {
+        td = document.createElement("td");
+        td.className = "pvtTotal rowTotal";
+        td.innerHTML = (typeof formattedVal.join === "function" ? formattedVal.join(" | ") : void 0) || formattedVal;
+        td.setAttribute("data-value", val);
+        td.setAttribute("data-for", "row" + i);
+        tr.appendChild(td);
+      }
       result.appendChild(tr);
     }
     tr = document.createElement("tr");
@@ -158,23 +196,47 @@ Default Renderer for hierarchical table layout
       colKey = colKeys[j];
       totalAggregator = pivotData.getAggregator([], colKey);
       val = totalAggregator.value();
-      td = document.createElement("td");
-      td.className = "pvtTotal colTotal";
       formattedVal = totalAggregator.format(val);
-      td.innerHTML = (typeof formattedVal.join === "function" ? formattedVal.join(" | ") : void 0) || formattedVal;
-      td.setAttribute("data-value", val);
-      td.setAttribute("data-for", "col" + j);
-      tr.appendChild(td);
+      if (aggregators.length > 1) {
+        for (idx = _m = 0, _len3 = aggregators.length; _m < _len3; idx = ++_m) {
+          agg = aggregators[idx];
+          td = document.createElement("td");
+          td.className = "pvtTotal colTotal";
+          td.innerHTML = (_ref6 = formattedVal[idx]) != null ? _ref6 : formattedVal;
+          td.setAttribute("data-value", (_ref7 = val[idx]) != null ? _ref7 : val);
+          td.setAttribute("data-for", "col" + j);
+          tr.appendChild(td);
+        }
+      } else {
+        td = document.createElement("td");
+        td.className = "pvtTotal colTotal";
+        td.innerHTML = (typeof formattedVal.join === "function" ? formattedVal.join(" | ") : void 0) || formattedVal;
+        td.setAttribute("data-value", val);
+        td.setAttribute("data-for", "col" + j);
+        tr.appendChild(td);
+      }
     }
     totalAggregator = pivotData.getAggregator([], []);
     val = totalAggregator.value();
-    td = document.createElement("td");
-    td.className = "pvtGrandTotal";
     formattedVal = totalAggregator.format(val);
-    td.innerHTML = (typeof formattedVal.join === "function" ? formattedVal.join(" | ") : void 0) || formattedVal;
-    td.setAttribute("data-value", val);
-    tr.appendChild(td);
-    result.appendChild(tr);
+    if (aggregators.length > 1) {
+      for (idx = _n = 0, _len4 = aggregators.length; _n < _len4; idx = ++_n) {
+        agg = aggregators[idx];
+        td = document.createElement("td");
+        td.className = "pvtGrandTotal";
+        td.innerHTML = (_ref8 = formattedVal[idx]) != null ? _ref8 : formattedVal;
+        td.setAttribute("data-value", (_ref9 = val[idx]) != null ? _ref9 : val);
+        tr.appendChild(td);
+        result.appendChild(tr);
+      }
+    } else {
+      td = document.createElement("td");
+      td.className = "pvtGrandTotal";
+      td.innerHTML = (typeof formattedVal.join === "function" ? formattedVal.join(" | ") : void 0) || formattedVal;
+      td.setAttribute("data-value", val);
+      tr.appendChild(td);
+      result.appendChild(tr);
+    }
     result.setAttribute("data-numrows", rowKeys.length);
     result.setAttribute("data-numcols", colKeys.length);
     return result;
