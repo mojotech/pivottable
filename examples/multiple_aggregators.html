@@ -25,22 +25,32 @@
             var data = [{
                 color: "blue",
                 shape: "circle",
+                size: "large",
+                env: "dev",
                 value: 10
             }, {
                 color: "red",
                 shape: "triangle",
+                size: "large",
+                env: "dev",
                 value: 15
             }, {
                 color: "red",
                 shape: "circle",
+                size: "med",
+                env: "prod",
                 value: 20
             }, {
                 color: "red",
                 shape: "triangle",
+                size: "med",
+                env: "dev",
                 value: 25
             }, {
                 color: "blue",
                 shape: "circle",
+                size: "small",
+                env: "prod",
                 value: 30
             }];
 
@@ -52,6 +62,31 @@
                 ],
                 "aggregatorName": "List Unique",
                 "renderer": $.pivotUtilities.renderers["Table"],
+                "rendererOptions": {
+                  "aggregators": [
+                    {
+                      "name": "Sum",
+                      "pos": 0,
+                      "values": [
+                        "Value"
+                      ]
+                    },
+                    {
+                      "name": "Avg",
+                      "pos": 1,
+                      "values": [
+                        "Value"
+                      ]
+                    },
+                    {
+                      "name": "Sum/Total",
+                      "pos": 2,
+                      "values": [
+                        "Value"
+                      ]
+                    }
+                  ]
+                },
                 "cols": ["color"],
                 "rows": ["shape"]
             });
