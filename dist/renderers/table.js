@@ -8,7 +8,7 @@ Default Renderer for hierarchical table layout
     __hasProp = {}.hasOwnProperty;
 
   TableRenderer = function(pivotData, opts) {
-    var agg, aggregator, aggregators, c, colAttrs, colKey, colKeys, defaults, formattedVal, i, idx, j, r, result, rowAttrs, rowKey, rowKeys, spanSize, td, th, totalAggregator, tr, txt, val, x, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _m, _n, _ref, _ref1, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9;
+    var agg, aggregator, aggregators, c, colAttrs, colKey, colKeys, defaults, formattedVal, i, idx, j, r, result, rowAttrs, rowKey, rowKeys, spanSize, td, th, totalAggregator, tr, txt, val, x, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _m, _n, _o, _p, _ref, _ref1, _ref10, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _ref9;
     defaults = {
       localeStrings: {
         totals: "Totals"
@@ -104,24 +104,45 @@ Default Renderer for hierarchical table layout
         th.textContent = r;
         tr.appendChild(th);
       }
-      th = document.createElement("th");
-      if (colAttrs.length === 0) {
-        th.className = "pvtTotalLabel";
-        th.innerHTML = opts.localeStrings.totals;
-      }
-      tr.appendChild(th);
       if (aggregators.length > 1) {
+        if (colAttrs.length !== 0) {
+          th = document.createElement("th");
+          tr.appendChild(th);
+        }
         for (x = _i = 0, _ref1 = colKeys.length; 0 <= _ref1 ? _i <= _ref1 : _i >= _ref1; x = 0 <= _ref1 ? ++_i : --_i) {
           for (idx = _j = 0, _len = aggregators.length; _j < _len; idx = ++_j) {
             agg = aggregators[idx];
             th = document.createElement("th");
-            th.className = "pvtColLabel";
+            th.className = "pvtColLabel aggLabel";
             th.textContent = agg;
             tr.appendChild(th);
           }
         }
+      } else {
+        th = document.createElement("th");
+        if (colAttrs.length === 0) {
+          th.className = "pvtTotalLabel";
+          th.innerHTML = opts.localeStrings.totals;
+        }
+        tr.appendChild(th);
       }
       result.appendChild(tr);
+    } else {
+      if (aggregators.length > 1) {
+        tr = document.createElement("tr");
+        th = document.createElement("th");
+        tr.appendChild(th);
+        for (x = _k = 0, _ref2 = colKeys.length; 0 <= _ref2 ? _k <= _ref2 : _k >= _ref2; x = 0 <= _ref2 ? ++_k : --_k) {
+          for (idx = _l = 0, _len1 = aggregators.length; _l < _len1; idx = ++_l) {
+            agg = aggregators[idx];
+            th = document.createElement("th");
+            th.className = "pvtColLabel aggLabel";
+            th.textContent = agg;
+            tr.appendChild(th);
+          }
+        }
+        result.appendChild(tr);
+      }
     }
     for (i in rowKeys) {
       if (!__hasProp.call(rowKeys, i)) continue;
@@ -149,12 +170,12 @@ Default Renderer for hierarchical table layout
         val = aggregator.value();
         formattedVal = aggregator.format(val);
         if (aggregators.length > 1) {
-          for (idx = _k = 0, _len1 = aggregators.length; _k < _len1; idx = ++_k) {
+          for (idx = _m = 0, _len2 = aggregators.length; _m < _len2; idx = ++_m) {
             agg = aggregators[idx];
             td = document.createElement("td");
             td.className = "pvtVal row" + i + " col" + j;
-            td.innerHTML = (_ref2 = formattedVal[idx]) != null ? _ref2 : formattedVal;
-            td.setAttribute("data-value", (_ref3 = val != null ? val[idx] : void 0) != null ? _ref3 : val);
+            td.innerHTML = (_ref3 = formattedVal[idx]) != null ? _ref3 : formattedVal;
+            td.setAttribute("data-value", (_ref4 = val != null ? val[idx] : void 0) != null ? _ref4 : val);
             tr.appendChild(td);
           }
         } else {
@@ -169,12 +190,12 @@ Default Renderer for hierarchical table layout
       val = totalAggregator.value();
       formattedVal = totalAggregator.format(val);
       if (aggregators.length > 1) {
-        for (idx = _l = 0, _len2 = aggregators.length; _l < _len2; idx = ++_l) {
+        for (idx = _n = 0, _len3 = aggregators.length; _n < _len3; idx = ++_n) {
           agg = aggregators[idx];
           td = document.createElement("td");
           td.className = "pvtTotal rowTotal";
-          td.innerHTML = (_ref4 = formattedVal[idx]) != null ? _ref4 : formattedVal;
-          td.setAttribute("data-value", (_ref5 = val != null ? val[idx] : void 0) != null ? _ref5 : val);
+          td.innerHTML = (_ref5 = formattedVal[idx]) != null ? _ref5 : formattedVal;
+          td.setAttribute("data-value", (_ref6 = val != null ? val[idx] : void 0) != null ? _ref6 : val);
           td.setAttribute("data-for", "row" + i);
           tr.appendChild(td);
         }
@@ -201,12 +222,12 @@ Default Renderer for hierarchical table layout
       val = totalAggregator.value();
       formattedVal = totalAggregator.format(val);
       if (aggregators.length > 1) {
-        for (idx = _m = 0, _len3 = aggregators.length; _m < _len3; idx = ++_m) {
+        for (idx = _o = 0, _len4 = aggregators.length; _o < _len4; idx = ++_o) {
           agg = aggregators[idx];
           td = document.createElement("td");
           td.className = "pvtTotal colTotal";
-          td.innerHTML = (_ref6 = formattedVal[idx]) != null ? _ref6 : formattedVal;
-          td.setAttribute("data-value", (_ref7 = val[idx]) != null ? _ref7 : val);
+          td.innerHTML = (_ref7 = formattedVal[idx]) != null ? _ref7 : formattedVal;
+          td.setAttribute("data-value", (_ref8 = val[idx]) != null ? _ref8 : val);
           td.setAttribute("data-for", "col" + j);
           tr.appendChild(td);
         }
@@ -223,12 +244,12 @@ Default Renderer for hierarchical table layout
     val = totalAggregator.value();
     formattedVal = totalAggregator.format(val);
     if (aggregators.length > 1) {
-      for (idx = _n = 0, _len4 = aggregators.length; _n < _len4; idx = ++_n) {
+      for (idx = _p = 0, _len5 = aggregators.length; _p < _len5; idx = ++_p) {
         agg = aggregators[idx];
         td = document.createElement("td");
         td.className = "pvtGrandTotal";
-        td.innerHTML = (_ref8 = formattedVal[idx]) != null ? _ref8 : formattedVal;
-        td.setAttribute("data-value", (_ref9 = val[idx]) != null ? _ref9 : val);
+        td.innerHTML = (_ref9 = formattedVal[idx]) != null ? _ref9 : formattedVal;
+        td.setAttribute("data-value", (_ref10 = val[idx]) != null ? _ref10 : val);
         tr.appendChild(td);
         result.appendChild(tr);
       }
