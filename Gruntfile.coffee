@@ -4,6 +4,8 @@ module.exports = (grunt) ->
 
   require('load-grunt-tasks')(grunt, pattern: ['grunt-*', 'grunt-contrib-*'])
 
+  RegExp.quote = (string) -> string.replace(/[-\\^$*+?.()|[\]{}]/g, '\\$&')
+
   grunt.initConfig
     app: 'src',
     dist: 'dist'
@@ -117,6 +119,20 @@ module.exports = (grunt) ->
           dest: '.tmp/<%= dist %>/'
         ]
 
+    sed:
+      versionNumber:
+        path: [
+          'bower.json',
+          'package.json',
+          'pivottable.jquery.json'
+        ]
+        pattern: do ->
+          old = grunt.option('old')
+          if old then old else RegExp.quote(old)
+        replacement: grunt.option('new')
+
+  # grunt change-version-number --old=A.B.C --new=X.Y.Z
+  grunt.registerTask('bump', 'sed')
 
   grunt.registerTask 'serve', 'Compile then start a connect web server', ->
     grunt.task.run [

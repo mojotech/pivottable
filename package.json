@@ -18,6 +18,7 @@
     "grunt-contrib-stylus": "^0.20.0",
     "grunt-contrib-uglify": "^0.6.0",
     "grunt-contrib-watch": "^0.6.1",
+    "grunt-sed": "^0.1.1",
     "load-grunt-tasks": "^0.6.0"
   }
 }
