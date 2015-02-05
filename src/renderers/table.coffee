@@ -80,22 +80,43 @@ TableRenderer = (pivotData, opts) ->
       th.className = "pvtAxisLabel"
       th.textContent = r
       tr.appendChild th
-    th = document.createElement("th")
-    if colAttrs.length is 0
-      th.className = "pvtTotalLabel"
-      th.innerHTML = opts.localeStrings.totals
-    tr.appendChild th
 
     if aggregators.length > 1
+      if colAttrs.length isnt 0
+        th = document.createElement("th")
+        tr.appendChild th
+
       # show multiple aggregators col headings
       for x in [0..colKeys.length]
         for agg, idx in aggregators
           th = document.createElement("th")
-          th.className = "pvtColLabel"
+          th.className = "pvtColLabel aggLabel"
+          th.textContent = agg
+          tr.appendChild th
+    else
+      th = document.createElement("th")
+      if colAttrs.length is 0
+        th.className = "pvtTotalLabel"
+        th.innerHTML = opts.localeStrings.totals
+      tr.appendChild th
+
+    result.appendChild tr
+  else # rowAttrs.length is 0 - check if we need aggregator headers
+    if aggregators.length > 1
+      tr = document.createElement("tr")
+      # Create empty th for the column headers column
+      th = document.createElement("th")
+      tr.appendChild th
+
+      # show multiple aggregators col headings
+      for x in [0..colKeys.length]
+        for agg, idx in aggregators
+          th = document.createElement("th")
+          th.className = "pvtColLabel aggLabel"
           th.textContent = agg
           tr.appendChild th
 
-    result.appendChild tr
+      result.appendChild tr
 
   #now the actual data rows, with their row headers and totals
   for own i, rowKey of rowKeys
