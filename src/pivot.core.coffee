@@ -18,10 +18,10 @@ numberFormat = (opts) ->
     digitsAfterDecimal: 2, scaler: 1,
     thousandsSep: ",", decimalSep: "."
     prefix: "", suffix: ""
-    showZero: false
+    showZero: true
   opts = $.extend defaults, opts
   (x) ->
-    return "" if isNaN(x) or not isFinite(x)
+    return "" if isNaN(x) or not isFinite(x) or not x?
     return "" if x == 0 and not opts.showZero
     result = addSeparators (opts.scaler*x).toFixed(opts.digitsAfterDecimal), opts.thousandsSep, opts.decimalSep
     return ""+opts.prefix+result+opts.suffix
